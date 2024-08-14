@@ -19,3 +19,5 @@
 CMake/Build/*
 CMake/Install/*
 abandoned
+
+build
