@@ -18,8 +18,8 @@ FetchContent_MakeAvailable(SFML)
 
 # 定义build_chapter函数，每个章节的编译规则一样
 function(build_chapter chapter_name SRC)
-	set(SRC ${SRC} Main.cpp)
     add_executable(${chapter_name} ${SRC})
+
     target_include_directories(${chapter_name} PRIVATE ../Include)
     target_link_libraries(${chapter_name} PRIVATE
         sfml-graphics
@@ -50,9 +50,9 @@ endfunction()
 
 # C++ source code, list of all subdirectories
 # Must appear after macros, otherwise they are not visible in subdirectories
-add_subdirectory(01_Intro/Source)
+#add_subdirectory(01_Intro/Source)
 #add_subdirectory(02_Resources/Source)
-#add_subdirectory(03_World/Source)
+add_subdirectory(03_World/Source)
 #add_subdirectory(04_Input/Source)
 #add_subdirectory(05_States/Source)
 #add_subdirectory(06_Menus/Source)
