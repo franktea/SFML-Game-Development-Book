@@ -16,6 +16,38 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
+# 定义build_chapter函数，每个章节的编译规则一样
+function(build_chapter chapter_name SRC)
+	set(SRC ${SRC} Main.cpp)
+    add_executable(${chapter_name} ${SRC})
+    target_include_directories(${chapter_name} PRIVATE ../Include)
+    target_link_libraries(${chapter_name} PRIVATE
+        sfml-graphics
+        sfml-window
+        sfml-audio
+        sfml-network
+        sfml-system
+    )
+
+	# 设置可执行文件输出路径
+    set_target_properties(${chapter_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
+		${PROJECT_SOURCE_DIR}/binary/${chapter_name})
+
+    add_custom_command(TARGET ${chapter_name} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+        ${PROJECT_SOURCE_DIR}/binary/${chapter_name}
+    )
+
+    # 拷贝资源目录
+    add_custom_target(copy_data_${chapter_name}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different 
+        "${PROJECT_SOURCE_DIR}/${chapter_name}/Media"
+        "${PROJECT_SOURCE_DIR}/binary/${chapter_name}/Media"
+        COMMENT "Copying data for ${chapter_name}"
+    )
+    add_dependencies(${chapter_name} copy_data_${chapter_name})
+endfunction()
+
 # C++ source code, list of all subdirectories
 # Must appear after macros, otherwise they are not visible in subdirectories
 add_subdirectory(01_Intro/Source)
